@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://bw5isw1ddji5s"]
+[gd_scene load_steps=8 format=3 uid="uid://bw5isw1ddji5s"]
 
 [ext_resource type="Texture2D" uid="uid://d33hrqgcr12k4" path="res://assets/TestTiles.png" id="1_mltur"]
 [ext_resource type="PackedScene" uid="uid://dwxko5gcwd3w4" path="res://Scenes/Enemy.tscn" id="1_n4uxn"]
 [ext_resource type="PackedScene" uid="uid://b3q5bwqggpeym" path="res://Scenes/testDummy.tscn" id="2_ttk05"]
+[ext_resource type="PackedScene" uid="uid://djibg0sanuovu" path="res://Scenes/ranged_enemy.tscn" id="4_mdt04"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_is2w8"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -40,8 +41,10 @@ layer_0/tile_data = PackedInt32Array(-65538, 0, 0, -65537, 0, 0, -131072, 0, 0, 
 position = Vector2(920, 473)
 gravity_scale = 0.0
 speed = 1
-min_Distance = 10
 isattacking = true
 
 [node name="TestDummy" parent="." instance=ExtResource("2_ttk05")]
 position = Vector2(505, 321)
+
+[node name="RangedEnemy" parent="." instance=ExtResource("4_mdt04")]
+position = Vector2(924, 217)

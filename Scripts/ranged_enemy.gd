@@ -10,48 +10,59 @@ var current_state: EnemyState = EnemyState.MOVEMENT_STATE
 
 
 
-
+@export var BulletScene = preload("res://Scenes/Bullet.tscn")
 @export var isattacking = false;
 var attackSpeed = 200;
 var direction
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	isattacking = true;
 
-	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
+
+
 	match current_state:
 		EnemyState.IDLE_STATE:
 			print("hi")
 		EnemyState.ATTACK_STATE:
-			if(isattacking):
-				isattacking = false
-				$AttackTimer.start()
-				direction = (player.position - self.position).normalized()
-				var impulse = direction * attackSpeed
-				apply_impulse(impulse,self.position)
-				
+			Attack()
 		EnemyState.MOVEMENT_STATE:
-			DirectionProcess(delta)
+			DirectionProcess()
 		_:
 			print("Unknown state")
 
 
-func DirectionProcess(delta):
+func DirectionProcess():
+	if(global_position.distance_to(player.global_position) > 250):
+		var next_position = nav_agent.get_next_path_position()
+		var dir = to_local(next_position).normalized()
+		move_and_collide(dir * speed )
 	
-	var next_position = nav_agent.get_next_path_position()
-	var dir = to_local(next_position).normalized()
-	move_and_collide(dir * speed )
-	
-	if(global_position.distance_to(player.global_position) < 150):
-		isattacking = true;
-		current_state =  EnemyState.ATTACK_STATE
+	if(global_position.distance_to(player.global_position) < 450 && isattacking ):
+
+		current_state = EnemyState.ATTACK_STATE
+
 
 func  MakePath():
 	nav_agent.target_position = player.global_position
+
+func Attack():
+	direction = player.position - self.position 
+	var marker = get_node("AimParent")
+	marker.Update_rotation(direction)
+	if(isattacking):
+		isattacking = false
+		var bullet = BulletScene.instantiate()
+		get_tree().current_scene.add_child(bullet)
+		var bulpositon =  $AimParent/AimLocation.global_position
+		bullet.position = bulpositon
+		bullet.shootBullet(direction)
+		current_state = EnemyState.MOVEMENT_STATE
+		$AttackTimer.start()
 
 
 func _on_timer_timeout():
@@ -59,10 +70,6 @@ func _on_timer_timeout():
 	pass # Replace with function body.
 
 
-
-
 func _on_attack_timer_timeout():
-	linear_velocity = Vector2.ZERO
-	angular_velocity = 0.0
-	current_state = EnemyState.MOVEMENT_STATE
+	isattacking = true
 	pass # Replace with function body.

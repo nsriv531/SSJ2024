@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://djibg0sanuovu"]
+
+[ext_resource type="PackedScene" uid="uid://dwxko5gcwd3w4" path="res://Scenes/Enemy.tscn" id="1_2uvto"]
+[ext_resource type="Script" path="res://Scripts/ranged_enemy.gd" id="2_ea6a6"]
+[ext_resource type="PackedScene" uid="uid://nmgaf0du1oif" path="res://Scenes/Bullet.tscn" id="3_ncc3y"]
+[ext_resource type="Script" path="res://Scripts/EnemyAimMarker.gd" id="4_rvnym"]
+
+[node name="RangedEnemy" instance=ExtResource("1_2uvto")]
+gravity_scale = 0.0
+script = ExtResource("2_ea6a6")
+speed = 1
+BulletScene = ExtResource("3_ncc3y")
+
+[node name="markerParent" type="Node2D" parent="." index="5"]
+position = Vector2(-1, 0)
+script = ExtResource("4_rvnym")
+
+[node name="Marker2D" type="Marker2D" parent="markerParent" index="0"]
+position = Vector2(93.605, 0)
